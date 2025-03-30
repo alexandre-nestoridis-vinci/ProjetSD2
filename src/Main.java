@@ -4,13 +4,7 @@ import java.nio.file.Paths;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Path artistFilePath = Paths.get("artists.txt");
-        Path mentionFilePath = Paths.get("mentions.txt");
-
-        Graph graph = new Graph(artistFilePath, mentionFilePath);
-
-        System.out.println("Voici le contenu de Graph : \n");
-        graph.afficherContenu();
+        Graph graph = new Graph("artists.txt", "mentions.txt");
 
         graph.trouverCheminLePlusCourt("The Beatles", "Kendji Girac");
         System.out.println("--------------------------");

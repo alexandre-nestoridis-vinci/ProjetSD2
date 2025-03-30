@@ -1,23 +1,23 @@
 public class Mention {
 
-    private int artisteId;
+    private int destination;
     private double poids;
 
     public Mention(int artiste, double cout) {
-        this.artisteId = artiste;
+        this.destination = artiste;
         this.poids = cout;
     }
 
-    public int getArtisteId() {
-        return artisteId;
+    public int getDestination() {
+        return destination;
     }
 
     public double getPoids() {
         return poids;
     }
 
-    public void setArtisteId(int artisteId) {
-        this.artisteId = artisteId;
+    public void setDestination(int destination) {
+        this.destination = destination;
     }
 
     public void setPoids(double poids) {
