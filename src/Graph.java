@@ -25,7 +25,7 @@ public class Graph {
                                 artistes.add(new Artiste(id, nom, categorie));
                                 nomVersIndex.put(nom, index);
                                 idVersIndex.put(id, index);
-                                listeAdjacence.add(new LinkedList<>());  // Utilisation de LinkedList au lieu de ArrayList
+                                listeAdjacence.add(new LinkedList<>());
                             } catch (NumberFormatException e) {
                                 System.err.println("Format invalide artists.txt: " + ligne);
                             }
