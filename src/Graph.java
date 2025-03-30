@@ -65,7 +65,51 @@ public class Graph {
     }
 
     public void trouverCheminLePlusCourt(String artiste1, String artiste2) {
+        Integer depart = nomVersIndex.get(artiste1);
+        Integer arrivee = nomVersIndex.get(artiste2);
 
+        if (depart == null || arrivee == null) {
+            throw new RuntimeException("Artiste inexistant");
+        }
+
+        double[] distance = new double[artistes.size()];
+        Arrays.fill(distance, Double.POSITIVE_INFINITY);
+        distance[depart] = 0;
+
+        int[] avant = new int[artistes.size()];
+        Arrays.fill(avant, -1);
+
+        PriorityQueue<double[]> file = new PriorityQueue<>(Comparator.comparingDouble(e -> e[1]));
+        file.add(new double[]{depart, 0});
+
+        while (!file.isEmpty()) {
+            double[] element = file.poll();
+            int index = (int) element[0];
+            if (index == arrivee) break;
+            if (element[1] > distance[index]) continue;
+
+            for (Mention m : listeAdjacence.get(index)) {
+                double distanceCalculee = distance[index] + m.getPoids();
+                if (distanceCalculee < distance[m.getDestination()]) {
+                    distance[m.getDestination()] = distanceCalculee;
+                    avant[m.getDestination()] = index;
+                    file.add(new double[]{m.getDestination(), distanceCalculee});
+                }
+            }
+        }
+
+        if (distance[arrivee] == Double.POSITIVE_INFINITY) {
+            throw new RuntimeException("Aucun chemin entre " + artiste1 + " et " + artiste2);
+        }
+
+        List<Integer> parcours = new ArrayList<>();
+        for (int etape = arrivee; etape != -1; etape = avant[etape]) parcours.add(etape);
+        Collections.reverse(parcours);
+
+        System.out.println("Longueur du chemin : " + (parcours.size() - 1) +
+                           "\nCoût total du chemin : " + distance[arrivee] +
+                           "\nChemin :");
+        parcours.forEach(indice -> System.out.println(artistes.get(indice).getNom() + " (" + artistes.get(indice).getType() + ")"));
     }
 
     public void trouverCheminMaxMentions(String artiste1, String artiste2) {
@@ -82,7 +126,7 @@ public class Graph {
         PriorityQueue<double[]> file = new PriorityQueue<>(Comparator.comparingDouble(e -> e[1]));
         file.add(new double[]{depart, 0});
 
-        while (!file.isEmpty()) {
+        while (!file.isEmpty()) { // Tant qu’il y a des sommets à explorer, on continue.
             double[] element = file.poll();
             int actuel = (int) element[0];
             if (actuel == arrivee) break;
@@ -99,8 +143,7 @@ public class Graph {
         }
 
         if (distances[arrivee] == Double.POSITIVE_INFINITY) {
-            System.out.println("Chemin inexistant");
-            return;
+            throw new RuntimeException("Aucun chemin entre " + artiste1 + " et " + artiste2);
         }
 
         List<Integer> parcours = new ArrayList<>();
@@ -108,7 +151,7 @@ public class Graph {
         Collections.reverse(parcours);
 
         System.out.println("Longueur du chemin : " + (parcours.size() - 1) +
-                "\nCoût total : " + distances[arrivee] +
+                "\nCoût total du chemin : " + distances[arrivee] +
                 "\nChemin :");
         parcours.forEach(indice -> System.out.println(artistes.get(indice).getNom() + " (" + artistes.get(indice).getType() + ")"));
     }
